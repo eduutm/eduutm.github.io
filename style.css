@@ -1,0 +1,225 @@
+/* --- CONFIGURACIÓN GENERAL Y PALETA DE COLORES --- */
+:root {
+    --color-fondo: #fefcfb; /* Un blanco roto, muy suave */
+    --color-texto: #4f4846; /* Marrón oscuro suave */
+    --color-rosa-suave: #fdeced; /* Rosa pastel para fondos */
+    --color-rosa-acento: #e57373; /* Un rosa más vivo para títulos y detalles */
+    --color-verde-hoja: #6b8e23; /* Verde oliva para detalles */
+
+    --fuente-titulos: 'Dancing Script', cursive;
+    --fuente-cuerpo: 'Quicksand', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--fuente-cuerpo);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    overflow-x: hidden; /* Evita barras de desplazamiento horizontales */
+}
+
+/* --- PANTALLA DE BIENVENIDA --- */
+#pantalla-bienvenida {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(rgba(255, 237, 237, 0.8), rgba(255, 237, 237, 0.8)), url('assets/mesa-completa-1.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.bienvenida-contenido h1 {
+    font-family: var(--fuente-titulos);
+    font-size: 5rem;
+    color: var(--color-texto);
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.bienvenida-contenido p {
+    font-size: 1.5rem;
+    color: var(--color-texto);
+    font-weight: 500;
+}
+
+.scroll-down-indicator {
+    position: absolute;
+    bottom: 30px;
+    animation: bounce 2s infinite;
+}
+
+.scroll-down-indicator span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-texto);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* --- CONTENIDO PRINCIPAL Y ESTRUCTURA DE TARJETAS --- */
+.contenido-web {
+    position: relative; 
+    background-color: transparent;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+}
+
+h2 {
+    font-family: var(--fuente-titulos);
+    color: var(--color-rosa-acento);
+    text-align: center;
+    font-size: 3.5rem;
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.8;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.floral-divider {
+    height: 50px;
+    width: 100px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M50 25 C 20 50, 80 50, 50 25 M30 25 C 10 40, 50 40, 30 25 M70 25 C 50 40, 90 40, 70 25" stroke="%23e57373" fill="none" stroke-width="2" stroke-linecap="round"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1rem auto;
+}
+
+/* --- GALERÍA --- */
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.galeria-grid .grid-item img,
+.galeria-grid .grid-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galeria-grid .grid-item:hover img,
+.galeria-grid .grid-item:hover video {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.descripcion-foto {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+    color: #777;
+}
+
+/* --- CONTACTO --- */
+.info-contacto {
+    text-align: left;
+    max-width: 400px;
+    margin: 2rem auto;
+}
+
+.info-contacto p {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+.info-contacto i {
+    color: var(--color-rosa-acento);
+    font-size: 1.2rem;
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+.cta-button {
+    display: block;
+    width: fit-content;
+    margin: 2rem auto 1rem;
+    padding: 15px 30px;
+    background-color: var(--color-rosa-acento);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(229, 115, 115, 0.4);
+}
+
+.cta-button:hover {
+    background-color: #c45353;
+    transform: translateY(-3px);
+}
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+
+/* --- DISEÑO PARA MÓVILES (Responsive) --- */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bienvenida-contenido h1 {
+        font-size: 3rem;
+    }
+
+    .bienvenida-contenido p {
+        font-size: 1.2rem;
+    }
+
+    h2 {
+        font-size: 2.8rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .galeria-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 10px;
+    }
+}
