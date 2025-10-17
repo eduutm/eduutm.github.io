@@ -8,10 +8,10 @@
     <!-- CSS y Fuentes -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome para Iconos (Email, WhatsApp) -->
+    <!-- Font Awesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Pega tu código de Google Analytics aquí si lo tienes -->
@@ -45,13 +45,14 @@
 
             <div class="floral-divider"></div>
 
-            <!-- Sección de Galería -->
-            <section id="galeria" class="card">
+            <!-- Sección de Galería 1: Boda Musical -->
+            <section id="galeria-musical" class="card">
                 <h2>Un Ejemplo: Boda Temática Musical</h2>
                 <p>Una muestra de nuestro trabajo, donde la música y el dulce se dieron la mano.</p>
                 <div class="galeria-grid">
                     <div class="grid-item video-container">
-                        <video controls autoplay muted loop playsinline>
+                        <!-- VÍDEO 1 SIN CONTROLES -->
+                        <video autoplay muted loop playsinline>
                             <source src="assets/video-boda.mp4" type="video/mp4">
                             Tu navegador no soporta vídeos.
                         </video>
@@ -71,18 +72,47 @@
 
             <div class="floral-divider"></div>
 
+            <!-- Sección de Galería 2: Tauromaquia -->
+            <section id="galeria-taurina" class="card">
+                <h2>Otro Ejemplo: Pasión Taurina</h2>
+                <p>¡Si quieres una fiesta que todo el mundo recuerde, tematizada y diferente, no puede faltar una mesa de Mesas FFP en ella!</p>
+                
+                <!-- Video destacado -->
+                <div class="video-destacado">
+                    <!-- VÍDEO 2 SIN CONTROLES -->
+                    <video autoplay muted loop playsinline>
+                        <source src="assets/video-toro.mp4" type="video/mp4">
+                        Tu navegador no soporta vídeos.
+                    </video>
+                </div>
+
+                <!-- Rejilla para las dos imágenes -->
+                <div class="galeria-grid grid-dos-fotos">
+                    <div class="grid-item">
+                        <img src="assets/mesa-toro-lejos.jpg" alt="Vista general de la mesa de chuches con temática de tauromaquia">
+                         <p class="descripcion-foto">Vista completa de la mesa, con la plaza de toros y todos los detalles.</p>
+                    </div>
+                    <div class="grid-item">
+                        <img src="assets/detalle-toro.jpg" alt="Detalle de la cabeza de toro hecha a mano">
+                        <p class="descripcion-foto">La impresionante cabeza de toro, hecha a mano como pieza central.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="floral-divider"></div>
+
             <!-- Sección de Contacto -->
             <section id="contacto" class="card">
                 <h2>¿Hablamos de tu Idea?</h2>
                 <p>Cuéntame qué estás planeando y crearé una propuesta dulce y a medida para ti. Pide información sin ningún compromiso.</p>
                 
                 <div class="info-contacto">
-                    <p><i class="fas fa-user"></i> <strong>María Angustias Jiménez</strong></p>
+                    <p><i class="fas fa-user"></i> <strong>Marian Jiménez</strong></p>
                     <p><i class="fas fa-envelope"></i> <a href="mailto:yayamarianjimenez@gmail.com">yayamarianjimenez@gmail.com</a></p>
-                    <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/34634486006" target="_blank">+34 634 486 006</a></p>
+                    <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/34634486006" target="_blank">+34 619870730</a></p>
                 </div>
 
-                <a href="https://wa.me/34634486006" target="_blank" class="cta-button">
+                <a href="https://wa.me/34619870730" target="_blank" class="cta-button">
                     Contactar por WhatsApp
                 </a>
             </section>
