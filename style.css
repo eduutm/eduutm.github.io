@@ -109,18 +109,31 @@ p {
     margin: 1rem auto;
 }
 
-/* --- GALERÍA --- */
+/* --- GALERÍAS --- */
 .galeria-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
 }
 
+/* NUEVO: Estilo para la rejilla de la sección taurina con más elementos */
+.galeria-grid.grid-tres-columnas {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    margin-top: 1.5rem;
+}
+
+/* NUEVO: Hace que la última foto en una rejilla impar se centre */
+.galeria-grid .grid-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1; /* Ocupa todo el ancho disponible */
+    max-width: 50%; /* Pero limitamos su tamaño para que no sea gigante */
+    margin: 0 auto; /* La centramos horizontalmente */
+}
+
 .galeria-grid .grid-item img,
 .galeria-grid .grid-item video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Esto recorta la imagen/video para llenar el espacio sin deformarse */
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -137,6 +150,24 @@ p {
     font-style: italic;
     margin-top: 0.5rem;
     color: #777;
+}
+
+/* CORRECCIÓN: Evita que el vídeo se desborde */
+.video-destacado {
+    width: 100%; /* Ocupa el 100% del espacio de la tarjeta */
+    margin: 1.5rem auto 0;
+}
+
+.video-destacado video {
+    width: 100%; /* El vídeo se ajusta a su contenedor */
+    height: auto; /* La altura se ajusta automáticamente */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* NUEVO: Contenedor especial para el vídeo vertical */
+.vertical-video-container {
+    height: 450px; /* Le damos una altura máxima fija para que no sea demasiado largo */
 }
 
 /* --- CONTACTO --- */
@@ -215,6 +246,11 @@ footer {
 
     .galeria-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* En móvil, el elemento centrado ocupa todo el ancho */
+    .galeria-grid .grid-item:last-child:nth-child(odd) {
+        max-width: 100%;
     }
 }
 
