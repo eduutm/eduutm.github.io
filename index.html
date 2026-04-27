@@ -3,156 +3,925 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesas FFP - Flora, Fauna y Primavera</title>
-    
-    <!-- CSS y Fuentes -->
-    <link rel="stylesheet" href="style.css">
+    <title>Mesas FFP — Flora, Fauna y Primavera</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome para Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- Pega tu código de Google Analytics aquí si lo tienes -->
-
+    <style>
+        /* ─── VARIABLES ─────────────────────────────────────── */
+        :root {
+            --cream:  #faf7f2;
+            --ivory:  #f3ede3;
+            --warm:   #e8ddd0;
+            --text:   #2c2420;
+            --muted:  #8a7d74;
+            --accent: #b85c4e;
+            --accent2:#d4956a;
+            --gold:   #c9a96e;
+            --white:  #ffffff;
+ 
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body:    'Jost', sans-serif;
+ 
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+ 
+        /* ─── RESET & BASE ──────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+        html { scroll-behavior: smooth; font-size: 16px; }
+ 
+        body {
+            font-family: var(--font-body);
+            background-color: var(--cream);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+ 
+        img, video {
+            display: block;
+            max-width: 100%;
+        }
+ 
+        a { color: inherit; text-decoration: none; }
+ 
+        /* ─── NOISE TEXTURE OVERLAY ─────────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+ 
+        /* ─── NAVIGATION ────────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.4s var(--ease-out), padding 0.4s var(--ease-out);
+        }
+ 
+        nav.scrolled {
+            background: rgba(250, 247, 242, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem 3rem;
+            border-bottom: 1px solid rgba(184, 92, 78, 0.12);
+        }
+ 
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--text);
+        }
+ 
+        .nav-logo span {
+            color: var(--accent);
+        }
+ 
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+ 
+        .nav-links a {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+ 
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent);
+            transition: width 0.3s var(--ease-out);
+        }
+ 
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after { width: 100%; }
+ 
+        /* ─── HERO ──────────────────────────────────────────── */
+        #hero {
+            height: 100vh;
+            min-height: 700px;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('assets/mesa-completa-1.jpg');
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.08);
+            transition: transform 8s ease;
+        }
+ 
+        #hero.loaded .hero-bg {
+            transform: scale(1.0);
+        }
+ 
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                160deg,
+                rgba(250, 247, 242, 0.82) 0%,
+                rgba(232, 221, 208, 0.65) 50%,
+                rgba(184, 92, 78, 0.08) 100%
+            );
+        }
+ 
+        .hero-content {
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.9s var(--ease-out) 0.3s, transform 0.9s var(--ease-out) 0.3s;
+        }
+ 
+        #hero.loaded .hero-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+ 
+        .hero-eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+ 
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+ 
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+ 
+        .hero-subtitle {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+        }
+ 
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            animation: fadeInUp 1s var(--ease-out) 1.2s both;
+        }
+ 
+        .hero-scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, transparent, var(--accent));
+            animation: scrollLine 1.8s ease-in-out infinite;
+        }
+ 
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(1); opacity: 1; }
+            50% { transform: scaleY(0.5); opacity: 0.4; }
+        }
+ 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to   { opacity: 1; transform: translate(-50%, 0); }
+        }
+ 
+        /* ─── SECTION LAYOUT ────────────────────────────────── */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+ 
+        section {
+            padding: 6rem 0;
+        }
+ 
+        /* ─── SECTION HEADER ────────────────────────────────── */
+        .section-header {
+            margin-bottom: 3.5rem;
+        }
+ 
+        .section-number {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
+        }
+ 
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            color: var(--text);
+        }
+ 
+        .section-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+ 
+        .section-body {
+            margin-top: 1.2rem;
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.85;
+            color: var(--muted);
+            max-width: 560px;
+        }
+ 
+        /* ─── DIVIDER ───────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0 0 0;
+        }
+ 
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--warm), transparent);
+        }
+ 
+        .divider-ornament {
+            color: var(--gold);
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+ 
+        /* ─── INTRO SECTION ─────────────────────────────────── */
+        #intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding-top: 8rem;
+        }
+ 
+        .intro-visual {
+            position: relative;
+        }
+ 
+        .intro-visual::before {
+            content: '';
+            position: absolute;
+            inset: -20px -20px 20px 20px;
+            border: 1px solid rgba(184, 92, 78, 0.2);
+            border-radius: 2px;
+            z-index: 0;
+        }
+ 
+        .intro-visual img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+ 
+        .intro-text .section-body {
+            max-width: 100%;
+        }
+ 
+        .intro-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--ivory);
+            border: 1px solid var(--warm);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-top: 2rem;
+        }
+ 
+        .intro-tag i { color: var(--accent); font-size: 0.8rem; }
+ 
+        /* ─── GALLERY SECTIONS ──────────────────────────────── */
+        .gallery-section .section-header {
+            text-align: left;
+        }
+ 
+        /* ─── GRID LAYOUTS ──────────────────────────────────── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+ 
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+ 
+        .grid-2-1 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+ 
+        .grid-media {
+            display: grid;
+            gap: 1rem;
+        }
+ 
+        /* media item */
+        .media-item {
+            overflow: hidden;
+            border-radius: 2px;
+            position: relative;
+        }
+ 
+        .media-item img,
+        .media-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s var(--ease-out);
+        }
+ 
+        .media-item:hover img,
+        .media-item:hover video {
+            transform: scale(1.04);
+        }
+ 
+        .media-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1rem 1.2rem 0.8rem;
+            background: linear-gradient(transparent, rgba(44, 36, 32, 0.6));
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 300;
+            letter-spacing: 0.03em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+ 
+        .media-item:hover .media-caption { opacity: 1; }
+ 
+        /* Gallery 1 – Boda Musical */
+        .boda-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 320px 260px;
+            gap: 1rem;
+        }
+ 
+        .boda-grid .media-item:first-child {
+            grid-row: 1 / 3;
+        }
+ 
+        /* Gallery 2 – Taurina */
+        .taurina-hero {
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            height: 380px;
+        }
+ 
+        .taurina-hero video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+ 
+        .taurina-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 240px;
+            gap: 1rem;
+        }
+ 
+        .taurina-grid .vertical-item {
+            grid-row: span 2;
+        }
+ 
+        /* Gallery 3 – Comunión */
+        .comunion-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: 280px 200px;
+            gap: 1rem;
+        }
+ 
+        .comunion-grid .c1 { grid-column: 1 / 7; }
+        .comunion-grid .c2 { grid-column: 7 / 13; }
+        .comunion-grid .c3 { grid-column: 1 / 5; }
+        .comunion-grid .c4 { grid-column: 5 / 9; }
+        .comunion-grid .c5 { grid-column: 9 / 13; }
+ 
+        /* ─── SCROLL REVEAL ─────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+        }
+ 
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+ 
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+ 
+        /* ─── CONTACT SECTION ───────────────────────────────── */
+        #contacto {
+            padding: 6rem 0 5rem;
+        }
+ 
+        .contact-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: start;
+        }
+ 
+        .contact-info-list {
+            list-style: none;
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+ 
+        .contact-info-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+ 
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--warm);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--accent);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+ 
+        .contact-info-list li:hover .contact-icon {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+ 
+        .contact-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.2rem;
+        }
+ 
+        .contact-value {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text);
+        }
+ 
+        .contact-right {
+            background: var(--ivory);
+            border: 1px solid var(--warm);
+            border-radius: 2px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .contact-right::before {
+            content: '✦';
+            position: absolute;
+            top: -0.5rem; right: 1.5rem;
+            font-size: 5rem;
+            color: rgba(184, 92, 78, 0.06);
+            font-family: var(--font-display);
+        }
+ 
+        .contact-right-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+ 
+        .contact-right-body {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--muted);
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+        }
+ 
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--text);
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 2px;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+ 
+        .btn-whatsapp:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+ 
+        .btn-whatsapp i { font-size: 1rem; }
+ 
+        /* ─── FOOTER ────────────────────────────────────────── */
+        footer {
+            border-top: 1px solid var(--warm);
+            padding: 2.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+ 
+        .footer-logo span { color: var(--accent); }
+ 
+        .footer-copy {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+ 
+        /* ─── RESPONSIVE ────────────────────────────────────── */
+        @media (max-width: 900px) {
+            nav { padding: 1.2rem 1.5rem; }
+            nav.scrolled { padding: 0.8rem 1.5rem; }
+            .nav-links { display: none; }
+ 
+            #intro { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 7rem; }
+            .intro-visual { order: -1; }
+            .intro-visual img { height: 300px; }
+            .intro-visual::before { display: none; }
+ 
+            .boda-grid { grid-template-rows: auto; }
+            .boda-grid .media-item:first-child { grid-row: auto; }
+ 
+            .taurina-grid { grid-template-columns: 1fr 1fr; }
+            .taurina-grid .vertical-item { grid-row: span 1; }
+ 
+            .comunion-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+            .comunion-grid .c1,
+            .comunion-grid .c2,
+            .comunion-grid .c3,
+            .comunion-grid .c4,
+            .comunion-grid .c5 { grid-column: auto; }
+ 
+            .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+ 
+            footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+        }
+ 
+        @media (max-width: 600px) {
+            main { padding: 0 1.25rem; }
+            section { padding: 4rem 0; }
+ 
+            .boda-grid,
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .boda-grid .media-item { height: 260px; }
+ 
+            .taurina-hero { height: 220px; }
+            .taurina-grid { grid-template-columns: 1fr; }
+ 
+            .comunion-grid { grid-template-columns: 1fr; }
+ 
+            .contact-right { padding: 2rem 1.5rem; }
+        }
+    </style>
 </head>
 <body>
-
-    <!-- Pantalla de Bienvenida a pantalla completa -->
-    <section id="pantalla-bienvenida">
-        <div class="bienvenida-contenido">
-            <h1>Mesas Flora, Fauna y Primavera</h1>
-            <p>El detalle dulce que tu evento merece</p>
-            <div class="scroll-down-indicator">
-                <span>Desliza para descubrir</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
+ 
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-logo">Mesas <span>FFP</span></div>
+        <ul class="nav-links">
+            <li><a href="#intro">Nosotras</a></li>
+            <li><a href="#galeria-boda">Boda</a></li>
+            <li><a href="#galeria-taurina">Taurina</a></li>
+            <li><a href="#galeria-comunion">Comunión</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+ 
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">Flora, Fauna y Primavera</p>
+            <h1 class="hero-title">
+                El detalle dulce<br>que tu <em>evento</em> merece
+            </h1>
+            <p class="hero-subtitle">Mesas de chuches y postres personalizadas para cada celebración</p>
+        </div>
+        <div class="hero-scroll">
+            <div class="hero-scroll-line"></div>
+            <span>Descubrir</span>
         </div>
     </section>
-
-    <!-- Contenido principal de la web -->
-    <div class="contenido-web">
-        
-        <main class="container">
-
-            <!-- Sección de Descripción -->
-            <section id="descripcion" class="card">
-                <h2>Un Mundo de Sabor y Fantasía</h2>
-                <p>Creamos mesas de chuches y postres totalmente personalizadas para dar vida a tus celebraciones. Cada mesa es un diseño único, adaptado a la temática que sueñes: bodas, bautizos, comuniones, cumpleaños... ¡El límite es tu imaginación!</p>
-                <p>Trabajamos con las mejores golosinas y cuidamos cada detalle para que el resultado sea tan delicioso como espectacular.</p>
-            </section>
-
-            <div class="floral-divider"></div>
-
-            <!-- Sección de Galería 1: Boda Musical -->
-            <section id="galeria-musical" class="card">
-                <h2>Ejemplo: Boda Temática Musical</h2>
-                <p>Una muestra de nuestro trabajo, donde la música y el dulce se dieron la mano.</p>
-                <div class="galeria-grid">
-                    <div class="grid-item">
-                        <video autoplay muted loop playsinline>
-                            <source src="assets/video-boda.mp4" type="video/mp4">
-                            Tu navegador no soporta vídeos.
-                        </video>
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/mesa-completa-1.jpg" alt="Mesa de chuches completa con temática musical">
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/mesa-completa-2.jpg" alt="Otra vista de la mesa de chuches musical">
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/detalle-carro-musical.jpg" alt="Detalle del carro musical con discos de chuches">
-                        <p class="descripcion-foto">Detalle especial: un carrito musical con "discos de vinilo" rellenos de deliciosas chuches.</p>
-                    </div>
+ 
+    <main>
+ 
+        <!-- INTRO -->
+        <section id="intro">
+            <div class="intro-visual reveal">
+                <img src="assets/mesa-completa-2.jpg" alt="Mesa de chuches personalizada">
+            </div>
+            <div class="intro-text reveal reveal-delay-1">
+                <div class="section-header">
+                    <span class="section-number">01 — Nuestra Historia</span>
+                    <h2 class="section-title">Un Mundo de <em>Sabor</em> y Fantasía</h2>
+                    <p class="section-body">Creamos mesas de chuches y postres totalmente personalizadas para dar vida a tus celebraciones. Cada mesa es un diseño único, adaptado a la temática que sueñes: bodas, bautizos, comuniones, cumpleaños…</p>
+                    <p class="section-body" style="margin-top:0.8rem;">Trabajamos con las mejores golosinas y cuidamos cada detalle para que el resultado sea tan delicioso como espectacular. El límite es tu imaginación.</p>
                 </div>
-            </section>
-
-            <div class="floral-divider"></div>
-
-            <!-- ===== SECCIÓN MODIFICADA: TAUROMAQUIA ===== -->
-            <section id="galeria-taurina" class="card">
-                <h2>Ejemplo: Pasión Taurina</h2>
-                <p>¡Si quieres una fiesta que todo el mundo recuerde, tematizada y diferente, no puede faltar una mesa de Mesas FFP en ella!</p>
-                
-                <div class="video-destacado">
+                <div class="intro-tag">
+                    <i class="fas fa-star"></i>
+                    Diseño 100% personalizado para tu evento
+                </div>
+            </div>
+        </section>
+ 
+        <div class="divider reveal">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦</span>
+            <div class="divider-line"></div>
+        </div>
+ 
+        <!-- GALLERY 1: BODA MUSICAL -->
+        <section id="galeria-boda" class="gallery-section">
+            <div class="section-header reveal">
+                <span class="section-number">02 — Ejemplo</span>
+                <h2 class="section-title">Boda Temática <em>Musical</em></h2>
+                <p class="section-body">Una muestra de nuestro trabajo, donde la música y el dulce se dieron la mano. Cada elemento diseñado a mano, cada golosina elegida con cariño.</p>
+            </div>
+ 
+            <div class="boda-grid">
+                <div class="media-item reveal">
                     <video autoplay muted loop playsinline>
-                        <source src="assets/video-toro.mp4" type="video/mp4">
-                        Tu navegador no soporta vídeos.
+                        <source src="assets/video-boda.mp4" type="video/mp4">
                     </video>
                 </div>
-
-                <div class="galeria-grid grid-tres-columnas">
-                    <div class="grid-item">
-                        <img src="assets/mesa-toro-lejos.jpg" alt="Vista general de la mesa de chuches con temática de tauromaquia">
-                         <p class="descripcion-foto">Vista completa de la mesa.</p>
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/detalle-toro.jpg" alt="Detalle de la cabeza de toro hecha a mano">
-                        <p class="descripcion-foto">Cabeza de toro hecha a mano.</p>
-                    </div>
-                    <div class="grid-item vertical-video-container">
-                        <video autoplay muted loop playsinline>
-                            <source src="assets/video-plaza-vertical.mp4" type="video/mp4">
-                            Tu navegador no soporta vídeos.
-                        </video>
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/toro-foto-1.jpg" alt="Foto temática taurina 1">
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/toro-foto-2.jpg" alt="Foto temática taurina 2">
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/toro-foto-3.jpg" alt="Foto temática taurina 3">
-                    </div>
-                    <div class="grid-item">
-                        <img src="assets/toro-foto-4.jpg" alt="Foto temática taurina 4">
-                    </div>
+                <div class="media-item reveal reveal-delay-1">
+                    <img src="assets/mesa-completa-1.jpg" alt="Mesa de chuches completa con temática musical">
                 </div>
-            </section>
-
-            <div class="floral-divider"></div>
-
-            <!-- ===== NUEVA SECCIÓN: PRIMERA COMUNIÓN ===== -->
-            <section id="galeria-comunion" class="card">
-                <h2>Ejemplo: Primera Comunión</h2>
-                <p>Un día inolvidable merece un rincón dulce y especial. Mesas delicadas y elegantes para celebrar la Primera Comunión.</p>
-                <div class="galeria-grid">
-                    <div class="grid-item"><img src="assets/comunion-1.jpg" alt="Foto 1 de mesa de comunión"></div>
-                    <div class="grid-item"><img src="assets/comunion-2.jpg" alt="Foto 2 de mesa de comunión"></div>
-                    <div class="grid-item"><img src="assets/comunion-3.jpg" alt="Foto 3 de mesa de comunión"></div>
-                    <div class="grid-item"><img src="assets/comunion-4.jpg" alt="Foto 4 de mesa de comunión"></div>
-                    <div class="grid-item"><img src="assets/comunion-5.jpg" alt="Foto 5 de mesa de comunión"></div>
+                <div class="media-item reveal reveal-delay-2">
+                    <img src="assets/detalle-carro-musical.jpg" alt="Carrito musical con discos de vinilo de chuches">
+                    <div class="media-caption">Carrito especial con "discos de vinilo" rellenos de chuches</div>
                 </div>
-            </section>
-
-            <div class="floral-divider"></div>
-
-            <!-- Sección de Contacto -->
-            <section id="contacto" class="card">
-                <h2>¿Hablamos de tu Idea?</h2>
-                <p>Cuéntame qué estás planeando y crearé una propuesta dulce y a medida para ti. Pide información sin ningún compromiso.</p>
-                
-                <div class="info-contacto">
-                    <p><i class="fas fa-user"></i> <strong>María Angustias Jiménez</strong></p>
-                    <p><i class="fas fa-envelope"></i> <a href="mailto:yayamarianjimenez@gmail.com">yayamarianjimenez@gmail.com</a></p>
-                    <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/34634486006" target="_blank">+34 619 87 07 30</a></p>
+            </div>
+        </section>
+ 
+        <div class="divider reveal">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦</span>
+            <div class="divider-line"></div>
+        </div>
+ 
+        <!-- GALLERY 2: PASIÓN TAURINA -->
+        <section id="galeria-taurina" class="gallery-section">
+            <div class="section-header reveal">
+                <span class="section-number">03 — Ejemplo</span>
+                <h2 class="section-title">Pasión <em>Taurina</em></h2>
+                <p class="section-body">¡Si quieres una fiesta que todo el mundo recuerde, tematizada y diferente, no puede faltar una mesa de Mesas FFP en ella!</p>
+            </div>
+ 
+            <div class="taurina-hero reveal">
+                <video autoplay muted loop playsinline>
+                    <source src="assets/video-toro.mp4" type="video/mp4">
+                </video>
+            </div>
+ 
+            <div class="taurina-grid">
+                <div class="media-item reveal">
+                    <img src="assets/mesa-toro-lejos.jpg" alt="Vista general de la mesa taurina">
+                    <div class="media-caption">Vista completa de la mesa</div>
                 </div>
-
-                <a href="https://wa.me/34619870730" target="_blank" class="cta-button">
-                    Contactar por WhatsApp
-                </a>
-            </section>
-
-        </main>
-
-        <footer>
-            <p>&copy; 2025 Mesas FFP - Flora, Fauna y Primavera. Todos los derechos reservados.</p>
-        </footer>
-
-    </div>
-
+                <div class="media-item reveal reveal-delay-1">
+                    <img src="assets/detalle-toro.jpg" alt="Cabeza de toro hecha a mano">
+                    <div class="media-caption">Cabeza de toro hecha a mano</div>
+                </div>
+                <div class="media-item vertical-item reveal reveal-delay-2">
+                    <video autoplay muted loop playsinline>
+                        <source src="assets/video-plaza-vertical.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item reveal">
+                    <img src="assets/toro-foto-1.jpg" alt="Foto taurina 1">
+                </div>
+                <div class="media-item reveal reveal-delay-1">
+                    <img src="assets/toro-foto-2.jpg" alt="Foto taurina 2">
+                </div>
+                <div class="media-item reveal reveal-delay-2">
+                    <img src="assets/toro-foto-3.jpg" alt="Foto taurina 3">
+                </div>
+                <div class="media-item reveal">
+                    <img src="assets/toro-foto-4.jpg" alt="Foto taurina 4">
+                </div>
+            </div>
+        </section>
+ 
+        <div class="divider reveal">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦</span>
+            <div class="divider-line"></div>
+        </div>
+ 
+        <!-- GALLERY 3: COMUNIÓN -->
+        <section id="galeria-comunion" class="gallery-section">
+            <div class="section-header reveal">
+                <span class="section-number">04 — Ejemplo</span>
+                <h2 class="section-title">Primera <em>Comunión</em></h2>
+                <p class="section-body">Un día inolvidable merece un rincón dulce y especial. Mesas delicadas y elegantes para celebrar este momento tan importante.</p>
+            </div>
+ 
+            <div class="comunion-grid">
+                <div class="media-item c1 reveal">
+                    <img src="assets/comunion-1.jpg" alt="Mesa de comunión 1">
+                </div>
+                <div class="media-item c2 reveal reveal-delay-1">
+                    <img src="assets/comunion-2.jpg" alt="Mesa de comunión 2">
+                </div>
+                <div class="media-item c3 reveal">
+                    <img src="assets/comunion-3.jpg" alt="Mesa de comunión 3">
+                </div>
+                <div class="media-item c4 reveal reveal-delay-1">
+                    <img src="assets/comunion-4.jpg" alt="Mesa de comunión 4">
+                </div>
+                <div class="media-item c5 reveal reveal-delay-2">
+                    <img src="assets/comunion-5.jpg" alt="Mesa de comunión 5">
+                </div>
+            </div>
+        </section>
+ 
+        <div class="divider reveal">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦</span>
+            <div class="divider-line"></div>
+        </div>
+ 
+        <!-- CONTACTO -->
+        <section id="contacto">
+            <div class="contact-inner">
+                <div class="reveal">
+                    <div class="section-header">
+                        <span class="section-number">05 — Contacto</span>
+                        <h2 class="section-title">¿Hablamos de tu <em>Idea</em>?</h2>
+                        <p class="section-body">Cuéntame qué estás planeando y crearé una propuesta dulce y a medida para ti. Pide información sin ningún compromiso.</p>
+                    </div>
+ 
+                    <ul class="contact-info-list">
+                        <li>
+                            <div class="contact-icon"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="contact-label">Contacto</div>
+                                <div class="contact-value">María Angustias Jiménez</div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="mailto:yayamarianjimenez@gmail.com" style="display:contents;">
+                                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                                <div>
+                                    <div class="contact-label">Email</div>
+                                    <div class="contact-value">yayamarianjimenez@gmail.com</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/34634486006" target="_blank" style="display:contents;">
+                                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                                <div>
+                                    <div class="contact-label">WhatsApp</div>
+                                    <div class="contact-value">+34 634 486 006</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+ 
+                <div class="contact-right reveal reveal-delay-2">
+                    <h3 class="contact-right-title">Cada evento es único. Tu mesa, también.</h3>
+                    <p class="contact-right-body">Desde la primera llamada hasta el gran día, te acompaño en cada decisión para que la mesa de chuches sea exactamente como la imaginabas — o incluso mejor.</p>
+                    <a href="https://wa.me/34634486006" target="_blank" class="btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Escribir por WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+ 
+    </main>
+ 
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">Mesas <span>FFP</span></div>
+        <p class="footer-copy">© 2025 Flora, Fauna y Primavera — Todos los derechos reservados</p>
+    </footer>
+ 
+    <script>
+        // Nav on scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+ 
+        // Hero load animation
+        window.addEventListener('load', () => {
+            document.getElementById('hero').classList.add('loaded');
+        });
+        document.getElementById('hero').classList.add('loaded');
+ 
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+ 
+        reveals.forEach(el => observer.observe(el));
+    </script>
+ 
 </body>
 </html>
+ 
